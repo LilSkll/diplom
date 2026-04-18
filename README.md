@@ -1,55 +1,50 @@
-# NeuroLingo Compare (Diploma Demo)
+# NeuroLingo Platform
 
-Demo web app for the diploma theme:
+Production-ready web platform for comparative analysis of grammar, syntax, and translation across:
 
-> Разработка веб-платформы для сравнительного анализа грамматики, синтаксиса и перевода английского, испанского, немецкого и русского языков с использованием нейросетевых технологий.
+- English
+- Spanish
+- German
+- Russian
 
-## What the demo includes
+## Stack
 
-- Text input with source language selection (`EN`, `ES`, `DE`, `RU`)
-- Comparative output blocks:
-  - grammar findings
-  - syntax findings
-  - parallel translations for 4 languages
-  - comparative linguistic insights
-  - concise neural summary
-- Two runtime modes:
-  - `Live AI` (when API key is configured)
-  - `Demo fallback` (stable local mock response for presentations)
+- Frontend: `React + Vite + TypeScript + TailwindCSS + Framer Motion + react-d3-tree`
+- Backend: `Node.js + Express` (stateless proxy to OpenAI)
+- No database used
+
+## Features
+
+- Input panel with source/target language selectors
+- Real GPT translation and grammar analysis
+- Syntax tree tab with JSON-to-tree rendering
+- Comparison mode for 4 languages
+- Dark/Light mode toggle
+- Copy result and export JSON
+- API key stored in browser `localStorage` only
 
 ## Run locally
 
 ```bash
 npm install
+npm install --prefix client
+npm install --prefix server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Apps:
 
-Note: this demo uses Webpack mode in scripts for better compatibility when project paths contain non-Latin characters.
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8787`
 
-## Environment variables (optional, for live AI)
+## Configuration
 
-Create `.env.local` in project root:
+Optional backend env in `server/.env`:
 
 ```env
-OPENAI_API_KEY=your_gpt_api_key_here
-# Optional aliases that also work:
-# GPT_API_KEY=...
-# OPENAI_KEY=...
-LLM_MODEL=gpt-4.1-mini
-LLM_API_URL=https://api.openai.com/v1/chat/completions
+PORT=8787
+CLIENT_ORIGIN=http://localhost:5173
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
-If `OPENAI_API_KEY` is missing, the app automatically uses demo fallback mode.
-
-The API now also returns `syntaxTree` (bracket notation) to improve syntactic demonstration quality in diploma presentations.
-
-## Deploy to Vercel
-
-1. Push this project to GitHub.
-2. Import repository in [Vercel](https://vercel.com/new).
-3. (Optional) Add environment variables in Vercel Project Settings.
-4. Deploy.
-
-No extra server setup is required. The API route is implemented in `src/app/api/analyze/route.ts`.
+The OpenAI API key is entered by user in UI and sent as `Authorization: Bearer {API_KEY}` from server proxy call.
