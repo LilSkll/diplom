@@ -52,7 +52,12 @@ async function runAnalysis(
   sourceLanguage: LanguageCode,
   text: string,
 ): Promise<AnalysisResponse> {
-  const apiKey = process.env.OPENAI_API_KEY ?? process.env.LLM_API_KEY;
+  const apiKey =
+    process.env.OPENAI_API_KEY ??
+    process.env.GPT_API_KEY ??
+    process.env.OPENAI_KEY ??
+    process.env.OPENAI_TOKEN ??
+    process.env.LLM_API_KEY;
   const model = process.env.LLM_MODEL ?? "gpt-4.1-mini";
   const apiUrl =
     process.env.LLM_API_URL ?? "https://api.openai.com/v1/chat/completions";
@@ -79,6 +84,7 @@ async function runAnalysis(
           },
           { role: "user", content: prompt },
         ],
+        response_format: { type: "json_object" },
         temperature: 0.2,
       }),
     });
@@ -96,7 +102,11 @@ async function runAnalysis(
       return buildDemoResponse(sourceLanguage, text);
     }
 
-    const parsed = JSON.parse(content) as Omit<AnalysisResponse, "mode">;
+    const parsed = normalizeAndValidate(content, sourceLanguage);
+    if (!parsed) {
+      return buildDemoResponse(sourceLanguage, text);
+    }
+
     return {
       ...parsed,
       sourceLanguage,
@@ -127,7 +137,10 @@ Return JSON object with exactly these fields:
   },
   "comparativeInsights": ["3-5 short bullets"],
   "neuralSummary": "2-3 sentence summary for academic presentation"
-}`;
+}
+
+Important translation rule:
+- Provide real, natural translations of the provided source text for all 4 target fields (en/es/de/ru), not labels and not transliterations.`;
 }
 
 function buildDemoResponse(
@@ -164,4 +177,100 @@ function buildDemoResponse(
       "The demo indicates that neural comparative analysis can jointly evaluate grammar stability, syntactic transfer effects, and multilingual translation quality. Even on short inputs, the platform exposes language-specific constraints that are useful for pedagogical and research interpretation.",
     mode: "demo",
   };
+}
+
+function normalizeAndValidate(
+  rawContent: string,
+  sourceLanguage: LanguageCode,
+): Omit<AnalysisResponse, "mode"> | null {
+  const parsed = parseModelJson(rawContent);
+  if (!parsed || typeof parsed !== "object") {
+    return null;
+  }
+
+  const grammarFindings = toStringArray(parsed.grammarFindings, 3);
+  const syntaxFindings = toStringArray(parsed.syntaxFindings, 3);
+  const comparativeInsights = toStringArray(parsed.comparativeInsights, 3);
+  const neuralSummary = toStringValue(parsed.neuralSummary);
+  const syntaxTree = toStringValue(parsed.syntaxTree);
+  const translations = toTranslations(parsed.translations, sourceLanguage);
+
+  if (
+    !grammarFindings ||
+    !syntaxFindings ||
+    !comparativeInsights ||
+    !neuralSummary ||
+    !syntaxTree ||
+    !translations
+  ) {
+    return null;
+  }
+
+  return {
+    sourceLanguage,
+    grammarFindings,
+    syntaxFindings,
+    syntaxTree,
+    translations,
+    comparativeInsights,
+    neuralSummary,
+  };
+}
+
+function parseModelJson(content: string): Record<string, unknown> | null {
+  try {
+    return JSON.parse(content) as Record<string, unknown>;
+  } catch {
+    const fenced = content.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fenced?.[1]) {
+      try {
+        return JSON.parse(fenced[1].trim()) as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
+function toStringArray(value: unknown, minSize: number): string[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+  const strings = value.filter((item): item is string => typeof item === "string");
+  if (strings.length < minSize) {
+    return null;
+  }
+  return strings.slice(0, 5);
+}
+
+function toStringValue(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim()) {
+    return null;
+  }
+  return value.trim();
+}
+
+function toTranslations(
+  value: unknown,
+  sourceLanguage: LanguageCode,
+): Record<LanguageCode, string> | null {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+  const maybe = value as Partial<Record<LanguageCode, unknown>>;
+  const en = toStringValue(maybe.en);
+  const es = toStringValue(maybe.es);
+  const de = toStringValue(maybe.de);
+  const ru = toStringValue(maybe.ru);
+
+  if (!en || !es || !de || !ru) {
+    return null;
+  }
+
+  const translations: Record<LanguageCode, string> = { en, es, de, ru };
+  if (translations[sourceLanguage].length < 3) {
+    return null;
+  }
+  return translations;
 }

@@ -34,6 +34,9 @@ Create `.env.local` in project root:
 
 ```env
 OPENAI_API_KEY=your_gpt_api_key_here
+# Optional aliases that also work:
+# GPT_API_KEY=...
+# OPENAI_KEY=...
 LLM_MODEL=gpt-4.1-mini
 LLM_API_URL=https://api.openai.com/v1/chat/completions
 ```
