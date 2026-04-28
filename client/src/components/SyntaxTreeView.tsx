@@ -10,7 +10,7 @@ export function SyntaxTreeView({ tree }: Props) {
   const data = useMemo(() => tree, [tree]);
 
   return (
-    <div className="h-[460px] w-full rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+    <div className="h-[460px] w-full rounded-2xl border border-slate-200 bg-white/90 dark:border-slate-700 dark:bg-slate-900">
       <Tree
         data={data}
         orientation="vertical"

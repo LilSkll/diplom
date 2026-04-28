@@ -21,7 +21,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.post("/api/analyze", async (req, res) => {
-  const { text, sourceLanguage, targetLanguage, apiKey } = req.body ?? {};
+  const { text, sourceLanguage, targetLanguage } = req.body ?? {};
 
   if (!text || typeof text !== "string" || text.trim().length < 1) {
     return res.status(400).json({ error: "Text is required." });
@@ -31,8 +31,8 @@ app.post("/api/analyze", async (req, res) => {
       .status(400)
       .json({ error: "Source and target language are required." });
   }
-  if (!apiKey || typeof apiKey !== "string") {
-    return res.status(400).json({ error: "OpenAI API key is required." });
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(500).json({ error: "OPENAI_API_KEY is not configured." });
   }
 
   try {
@@ -41,7 +41,7 @@ app.post("/api/analyze", async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || "gpt-4.1-mini",

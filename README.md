@@ -44,7 +44,19 @@ Optional backend env in `server/.env`:
 ```env
 PORT=8787
 CLIENT_ORIGIN=http://localhost:5173
+OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4.1-mini
 ```
 
-The OpenAI API key is entered by user in UI and sent as `Authorization: Bearer {API_KEY}` from server proxy call.
+The OpenAI API key is read on the server from `OPENAI_API_KEY`.
+
+## Deploy to Vercel
+
+Set these Environment Variables in your Vercel project:
+
+- `OPENAI_API_KEY` = your OpenAI key
+- `OPENAI_MODEL` = `gpt-4.1-mini` (optional)
+- `VITE_API_BASE_URL` = leave empty to use same-domain `/api`
+
+After setting variables, run Redeploy. The app sends analysis requests to `/api/analyze`,
+and syntax tree generation works through the same endpoint.
