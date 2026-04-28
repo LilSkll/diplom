@@ -34,12 +34,6 @@ export function SyntaxTreeView({ tree }: Props) {
             </text>
           </g>
         )}
-        styles={{
-          links: {
-            stroke: "#111827",
-            strokeWidth: 1.2,
-          },
-        }}
       />
     </div>
   );
