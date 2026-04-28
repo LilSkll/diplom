@@ -10,15 +10,36 @@ export function SyntaxTreeView({ tree }: Props) {
   const data = useMemo(() => tree, [tree]);
 
   return (
-    <div className="h-[420px] w-full rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+    <div className="h-[460px] w-full rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
       <Tree
         data={data}
         orientation="vertical"
-        translate={{ x: 280, y: 60 }}
-        pathFunc="step"
-        zoom={0.8}
+        translate={{ x: 360, y: 56 }}
+        pathFunc="elbow"
+        zoom={0.78}
         collapsible
-        separation={{ siblings: 1.2, nonSiblings: 1.6 }}
+        separation={{ siblings: 1.3, nonSiblings: 1.9 }}
+        draggable
+        nodeSize={{ x: 150, y: 95 }}
+        renderCustomNodeElement={({ nodeDatum }) => (
+          <g>
+            <text
+              x={0}
+              y={0}
+              textAnchor="middle"
+              fill="currentColor"
+              className="text-sm font-medium"
+            >
+              {nodeDatum.name}
+            </text>
+          </g>
+        )}
+        styles={{
+          links: {
+            stroke: "#111827",
+            strokeWidth: 1.2,
+          },
+        }}
       />
     </div>
   );
