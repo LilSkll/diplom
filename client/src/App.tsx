@@ -70,25 +70,39 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900 transition-colors dark:bg-slate-950 dark:text-white">
-      <div className="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(circle_at_top,_#c7d2fe_0%,_transparent_45%),radial-gradient(circle_at_right,_#a5f3fc_0%,_transparent_35%)] dark:bg-[radial-gradient(circle_at_top,_#1e1b4b_0%,_transparent_40%),radial-gradient(circle_at_right,_#083344_0%,_transparent_30%)]" />
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 md:px-6">
-        <header className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-white/70 bg-white/85 p-5 shadow-lg shadow-slate-300/40 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/75 dark:shadow-slate-950/50">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-cyan-300">
-              Comparative Linguistics Studio
-            </p>
-            <h1 className="mt-1 text-2xl font-bold md:text-3xl">NeuroLingo AI Analyzer</h1>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Clean translation, grammar explanation, and syntax tree generation for English,
-              Spanish, German, and Russian.
-            </p>
+      <div className="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(circle_at_10%_0%,_#bfdbfe_0%,_transparent_35%),radial-gradient(circle_at_90%_0%,_#a7f3d0_0%,_transparent_25%)] dark:bg-[radial-gradient(circle_at_10%_0%,_#1d4ed8_0%,_transparent_25%),radial-gradient(circle_at_90%_0%,_#064e3b_0%,_transparent_22%)]" />
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-8 md:px-6">
+        <header className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-slate-300/40 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/75 dark:shadow-slate-950/50">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600 dark:text-cyan-300">
+                Comparative Linguistics Studio
+              </p>
+              <h1 className="mt-2 text-3xl font-bold md:text-4xl">
+                NeuroLingo: Syntax & Grammar Intelligence
+              </h1>
+              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+                A complete pipeline for translation, grammar diagnostics, and phrase-structure
+                syntax trees across four languages.
+              </p>
+            </div>
+            <ThemeToggle darkMode={darkMode} onToggle={() => setDarkMode((x) => !x)} />
           </div>
-          <ThemeToggle darkMode={darkMode} onToggle={() => setDarkMode((x) => !x)} />
+          <div className="mt-5 grid gap-3 text-sm md:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+              <p className="font-semibold">Server-secured key</p>
+              <p className="mt-1 text-slate-600 dark:text-slate-300">OpenAI key only in Vercel env.</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+              <p className="font-semibold">Textbook syntax trees</p>
+              <p className="mt-1 text-slate-600 dark:text-slate-300">Hierarchical constituent view.</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+              <p className="font-semibold">Deployment-ready</p>
+              <p className="mt-1 text-slate-600 dark:text-slate-300">Vercel + GitHub compatible setup.</p>
+            </div>
+          </div>
         </header>
-        <section className="rounded-2xl border border-emerald-200 bg-emerald-50/90 px-4 py-3 text-sm text-emerald-800 shadow-sm dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300">
-          OpenAI key is now read on the server from `OPENAI_API_KEY` (Vercel Environment
-          Variables). Users no longer need to enter keys in the UI.
-        </section>
 
         <div className="grid gap-4 lg:grid-cols-[360px_1fr]">
           <InputPanel
@@ -116,7 +130,7 @@ function App() {
               <button
                 onClick={copyResult}
                 disabled={!result}
-                className="rounded-xl border border-slate-300 px-3 py-2 text-sm disabled:opacity-50 dark:border-slate-700"
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm transition hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
                 type="button"
               >
                 Copy results
@@ -124,7 +138,7 @@ function App() {
               <button
                 onClick={exportResult}
                 disabled={!result}
-                className="rounded-xl border border-slate-300 px-3 py-2 text-sm disabled:opacity-50 dark:border-slate-700"
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm transition hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
                 type="button"
               >
                 Export JSON

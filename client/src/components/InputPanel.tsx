@@ -23,9 +23,15 @@ export function InputPanel({
   onAnalyze,
   loading,
 }: Props) {
+  const presets = [
+    "An inventory of syntactic functions is taken to be primitive.",
+    "Although I had prepared, I still forgot key vocabulary during the exam.",
+    "If she had known earlier, she would have translated the paragraph differently.",
+  ];
+
   return (
-    <section className="rounded-3xl border border-white/70 bg-white/85 p-5 shadow-lg shadow-slate-300/30 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/75 dark:shadow-slate-950/50">
-      <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Input</h2>
+    <section className="rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-slate-300/30 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/75 dark:shadow-slate-950/50">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Sentence Studio</h2>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
         Enter any sentence and run GPT-based comparative analysis.
       </p>
@@ -66,11 +72,23 @@ export function InputPanel({
         <textarea
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
-          rows={6}
+          rows={7}
           placeholder="Type sentence to analyze..."
           className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm outline-none ring-blue-200 transition focus:ring-2 dark:border-slate-700 dark:bg-slate-800"
         />
       </label>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {presets.map((preset, index) => (
+          <button
+            key={preset}
+            type="button"
+            onClick={() => onTextChange(preset)}
+            className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          >
+            Example {index + 1}
+          </button>
+        ))}
+      </div>
 
       <button
         type="button"

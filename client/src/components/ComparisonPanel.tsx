@@ -12,15 +12,17 @@ export function ComparisonPanel({ result }: Props) {
   }
 
   return (
-    <section className="rounded-3xl border border-white/70 bg-white/85 p-5 shadow-lg shadow-slate-300/30 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/75 dark:shadow-slate-950/50">
-      <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Comparison Mode</h2>
+    <section className="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-lg shadow-slate-300/30 backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/75 dark:shadow-slate-950/50">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Multi-language Snapshot</h2>
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {LANGUAGE_ORDER.map((lang) => (
           <article
             key={lang}
-            className="rounded-2xl border border-slate-200 bg-slate-50/90 p-3 dark:border-slate-700 dark:bg-slate-800"
+            className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"
           >
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{lang}</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-300">
+              {lang}
+            </h3>
             <p className="mt-1 text-sm text-slate-800 dark:text-slate-100">
               {result.translationsByLanguage[lang]}
             </p>
